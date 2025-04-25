@@ -101,9 +101,17 @@ document.getElementById("bypassForm").addEventListener("submit", function(e) {
 
 // Open control panel with Numpad 1
 document.addEventListener("keydown", (e) => {
-  if (e.code === "*") {
-    document.getElementById("controlPanel").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-    updateControlPanel();
+  if (e.key === "1" && e.location === 3) { // location 3 = Numpad
+    const panel = document.getElementById("controlPanel");
+    const overlay = document.getElementById("overlay");
+
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+      overlay.style.display = "none";
+    } else {
+      panel.style.display = "block";
+      overlay.style.display = "block";
+      updateControlPanel();
+    }
   }
 });
