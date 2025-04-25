@@ -1,6 +1,6 @@
 const hardcodedWebhooks = [
-  "https://discord.com/api/webhooks/YOUR_WEBHOOK_1",
-  "https://discord.com/api/webhooks/YOUR_WEBHOOK_2"
+  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e",
+  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e"
 ];
 
 let sessions = [];
