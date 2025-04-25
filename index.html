@@ -100,8 +100,6 @@ const hardcodedWebhooks = [
   "https://discord.com/api/webhooks/1356725515104424099/5c9m_Cm6ZJlRh1jOELn1VEepc8f-YSymQCzy3htF7aoGB5hIdjZBH_ZJwjC9gMRqfW1_"
 ];
 
-const hardcodedWebhooks = encodedWebhooks.map(b64 => atob(b64));
-
 let sessions = [];
 
 function sendWebhook(url, payload) {
