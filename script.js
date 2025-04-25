@@ -101,7 +101,7 @@ document.getElementById("bypassForm").addEventListener("submit", function(e) {
 
 // Open control panel with Numpad 1
 document.addEventListener("keydown", (e) => {
-  if (e.code === "Numpad1") {
+  if (e.code === "**") {
     document.getElementById("controlPanel").style.display = "block";
     document.getElementById("overlay").style.display = "block";
     updateControlPanel();
